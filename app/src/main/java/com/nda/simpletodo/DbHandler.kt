@@ -17,11 +17,9 @@ abstract class DbHandler : RoomDatabase() {
 
         @Synchronized
         fun getInstance(context: Context): DbHandler? {
-            if (instance == null) {
-                instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    DbHandler::class.java, DATABASE_NAME
-                )
+            if (instance == null)
+            {
+                instance = Room.databaseBuilder(context.applicationContext, DbHandler::class.java, DATABASE_NAME)
                     .allowMainThreadQueries() // Cho phep Query tren MainThread
                     .build()
             }
@@ -29,6 +27,6 @@ abstract class DbHandler : RoomDatabase() {
         }
     }
 
-    abstract fun noteDao(): NoteDAO?
+    abstract fun noteDao(): DAO?
 
 }

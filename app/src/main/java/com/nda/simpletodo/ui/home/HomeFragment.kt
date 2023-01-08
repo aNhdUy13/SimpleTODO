@@ -6,33 +6,37 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import android.widget.CalendarView.OnDateChangeListener
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nda.simpletodo.DbHandler
 import com.nda.simpletodo.R
-import com.nda.simpletodo.UtilitiesManager
 import com.nda.simpletodo.models.Note
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class HomeFragment : Fragment() {
 
     val sdf = SimpleDateFormat("dd/MM/yyyy")
     val currentDate = sdf.format(Date())
 
-    var txt_currentDate: TextView? = null
+    var txt_noDataFound: TextView? = null
     var img_addNote: ImageView? = null
+    var img_showNotes: ImageView? = null
+
+
     var rcv_home: RecyclerView? = null
+    var calendarView_note: CalendarView? = null
 
 
     lateinit var adapterNote: AdapterNote
@@ -59,12 +63,35 @@ class HomeFragment : Fragment() {
     private fun init() {
         val splitCurrDate = currentDate.toString().split("/")
         val strCurrDate = formatMonthToStr(splitCurrDate[1], splitCurrDate[0], splitCurrDate[2])
-        txt_currentDate?.text = strCurrDate
 
         img_addNote?.setOnClickListener {
             dialogAddNote()
         }
 
+        img_showNotes?.setOnClickListener {
+            Toast.makeText(context, "All Notes", Toast.LENGTH_SHORT).show()
+            setUpAndDisplayNotes()
+        }
+
+        calendarView_note?.setOnDateChangeListener(OnDateChangeListener { view, year, month, dayOfMonth ->
+
+            var sDay = dayOfMonth.toString()
+            var sMonth = (month+1).toString()
+            var sYear = year.toString()
+
+            if (dayOfMonth < 10)
+            {
+                sDay = "0$dayOfMonth"
+            }
+            if ((month+1) < 10)
+            {
+                sMonth = "0${month+1}"
+            }
+
+            var sDate = "$sDay/$sMonth/$sYear"
+
+            setUpAndDisplayNotesBySelectedDay(sDate)
+        })
 //        adapterNote.setOnItemClickListener(object : AdapterNote.onCustomItemClickListener{
 //            override fun onItemClick(position: Int) {
 //                val note = noteList[position]
@@ -79,6 +106,14 @@ class HomeFragment : Fragment() {
 
         noteList = DbHandler.getInstance(requireContext())?.noteDao()?.getAllNote() as ArrayList<Note>
 
+        if (noteList.size <= 0)
+        {
+            txt_noDataFound?.visibility  = VISIBLE
+            rcv_home?.visibility = GONE
+        } else {
+            rcv_home?.visibility = VISIBLE
+            txt_noDataFound?.visibility  = GONE
+        }
         adapterNote = AdapterNote(noteList,this)
         rcv_home?.adapter = adapterNote
         rcv_home?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -86,7 +121,26 @@ class HomeFragment : Fragment() {
         adapterNote.setChangedDataTable(noteList)
 
     }
+    fun setUpAndDisplayNotesBySelectedDay(selectedDay: String) {
 
+        noteList = DbHandler.getInstance(requireContext())?.noteDao()?.getNoteFromDay(selectedDay) as ArrayList<Note>
+
+        if (noteList.size <= 0)
+        {
+            txt_noDataFound?.visibility  = VISIBLE
+            rcv_home?.visibility = GONE
+        } else {
+            rcv_home?.visibility = VISIBLE
+            txt_noDataFound?.visibility  = GONE
+        }
+
+        adapterNote = AdapterNote(noteList,this)
+        rcv_home?.adapter = adapterNote
+        rcv_home?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        adapterNote.setChangedDataTable(noteList)
+
+    }
     private fun dialogAddNote() {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.dialog_note)
@@ -257,9 +311,12 @@ class HomeFragment : Fragment() {
 
 
     private fun initUI(view: View) {
-        txt_currentDate = view.findViewById(R.id.txt_currentDate)
+        calendarView_note  = view.findViewById(R.id.calendarView_note)
+
+        txt_noDataFound = view.findViewById(R.id.txt_noDataFound)
 
         img_addNote = view.findViewById(R.id.img_addNote)
+        img_showNotes = view.findViewById(R.id.img_showNotes)
 
         rcv_home = view.findViewById(R.id.rcv_home)
     }

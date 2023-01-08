@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_calendar"
-        android:name="com.nda.simpletodo.ui.calendar.CalendarFragment"
+        android:name="com.nda.simpletodo.ui.searchNotes.SearchNoteFragment"
         android:label="@string/title_calendar"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/navigation_setting"
