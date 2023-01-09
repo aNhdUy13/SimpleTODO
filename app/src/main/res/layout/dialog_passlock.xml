@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_first"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="@color/white">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/txt_titlePasslock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Input password"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:textSize="15dp"/>
+
+            <EditText
+                android:id="@+id/edt_pass"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center|left"
+                android:hint="******"
+                android:padding="5dp"
+                android:textSize="14dp"
+                android:inputType="number|numberPassword"
+                android:maxLength="6"
+                android:background="@drawable/shape_add"/>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_setPassLock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:textSize="13dp"
+                    android:layout_weight="1"
+                    android:text="Check"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
