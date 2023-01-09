@@ -66,7 +66,7 @@
                         <EditText
                             android:id="@+id/edt_noteTitle"
                             android:layout_width="match_parent"
-                            android:background="@drawable/shape_default"
+                            android:background="@drawable/shape_add"
                             android:padding="5dp"
                             android:hint="Laptop"
                             android:textColor="@color/black_text"
@@ -90,7 +90,7 @@
                     <EditText
                         android:id="@+id/edt_noteDes"
                         android:layout_width="match_parent"
-                        android:background="@drawable/shape_default"
+                        android:background="@drawable/shape_add"
                         android:padding="5dp"
                         android:hint="100.000"
                         android:textColor="@color/black"
@@ -98,6 +98,43 @@
                         android:layout_height="40dp"/>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Category"
+                        android:textColor="@color/purple_700"
+                        android:textStyle="bold"
+                        android:textSize="15dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        >
+                        <TextView
+                            android:id="@+id/txt_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center|left"
+                            android:inputType="phone"
+                            android:textColor="@color/black"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:background="@drawable/shape_add"
+                            android:text="Work"
+
+                            android:padding="15dp"
+                            android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
 
                 <LinearLayout
@@ -117,7 +154,7 @@
                             android:layout_height="match_parent"
                             android:text="Date"
                             android:gravity="center|left"
-                            android:textColor="@color/black_text"
+                            android:textColor="@color/purple_700"
                             android:textSize="15dp"/>
                     </LinearLayout>
 
@@ -125,7 +162,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1.5"
-                        android:background="@drawable/shape_default"
+                        android:background="@drawable/shape_add"
                         android:gravity="center"
                         >
                         <ImageView

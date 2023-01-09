@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple TODO</string>
+    <string name="title_home">Trang Chính</string>
+    <string name="title_calendar">Tìm Kiếm</string>
+    <string name="title_setting">Cài Đặt</string>
+    <string name="title_application">Ứng Dụng</string>
+    <string name="title_passlock">Mật khẩu</string>
+    <string name="title_shareApp">Chia sẻ ứng dụng</string>
+    <string name="title_review">Đánh giá</string>
+    <string name="title_language">Ngôn ngữ ứng dụng</string>
+    <string name="title_noData">Không Tìm Thấy Dữ Liệu !</string>
+</resources>

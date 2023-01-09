@@ -1,15 +1,21 @@
 package com.nda.simpletodo
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.os.Build
+import android.os.LocaleList
+import com.google.android.material.internal.ContextUtils
+import java.util.*
 
 class UtilsManager {
 
     var  mySharedPreferences: MySharedPreferences? = null
 
     companion object{
-        private val PREF_PASSLOCK = "PREF_PASSLOCK"
-        private val PREF_ENABLE_PASSLOCK = "PREF_ENABLE_PASSLOCK"
-
         lateinit var instance: UtilsManager
 
         fun init(context: Context) {
@@ -26,26 +32,40 @@ class UtilsManager {
             return instance as UtilsManager
         }
 
+        /**
+         * Related to Application language
+         */
+        fun setApplicationLanguage(value: String)
+        {
+            getMyInstance().mySharedPreferences?.putStringValue("APPLICATION_LANGUAGE", value)
+        }
+
+        fun getApplicationLanguage(): String? {
+            return  getMyInstance().mySharedPreferences?.getStringValue("APPLICATION_LANGUAGE")
+        }
 
         /**
          * Related to set enable pass lock
          */
         fun setEnablePassLock(isEnable: Boolean) {
-            getMyInstance().mySharedPreferences?.putBooleanValue(isEnable, PREF_ENABLE_PASSLOCK)
+            getMyInstance().mySharedPreferences?.putBooleanValue(isEnable, "ENABLE_PASSLOCK")
         }
 
         fun getEnablePassLock(): Boolean? {
-            return getMyInstance().mySharedPreferences?.getBooleanValue(PREF_ENABLE_PASSLOCK)
+            return getMyInstance().mySharedPreferences?.getBooleanValue("ENABLE_PASSLOCK")
         }
 
         fun setPassLock(value: String?) {
-            getMyInstance().mySharedPreferences?.putStringValue(value, PREF_PASSLOCK)
+            getMyInstance().mySharedPreferences?.putStringValue("PASSLOCK", value)
         }
 
         fun getPassLock(): String? {
-            return getMyInstance().mySharedPreferences?.getStringValue(PREF_PASSLOCK)
+            return getMyInstance().mySharedPreferences?.getStringValue("PASSLOCK")
         }
 
+        /**
+         *
+         * */
         fun formatMonthToStr(month: String, day: String, year: String): String? {
             var strFormatted = "Unk"
 
@@ -78,8 +98,22 @@ class UtilsManager {
             return "$strFormatted $day, $year"
         }
 
-    }
+        /**
+         *
+         * */
+        fun setLocalLanguage(activity: Activity, languageCode: String)
+        {
+            val locale = Locale(languageCode)
+            Locale.setDefault(locale)
 
+            val resources: Resources = activity.resources
+            val configuration: Configuration = resources.configuration
+            configuration.setLocale(locale)
+            resources.updateConfiguration(configuration, resources.displayMetrics)
+        }
+
+
+    }
 
 
 }

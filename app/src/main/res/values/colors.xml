@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="black_text">#2B2929</color>
+    <color name="silver_text">#B5555555</color>
+
+    <color name="item_blue_color">#CDEFF8FF</color>
+
 </resources>

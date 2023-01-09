@@ -42,7 +42,7 @@ class MySharedPreferences {
      *  (Frame) String value
      *
      ****************************************/
-    fun putStringValue(value: String?, key: String?) {
+    fun putStringValue(key: String?, value: String?) {
         val sharedPreferences = mContext!!.getSharedPreferences(MY_SHARED_PREFERENCES, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(key, value)

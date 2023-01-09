@@ -20,7 +20,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nda.simpletodo.DbHandler
 import com.nda.simpletodo.R
+import com.nda.simpletodo.UtilsManager
 import com.nda.simpletodo.models.Note
+import kotlinx.android.synthetic.main.dialog_note.*
+import kotlinx.android.synthetic.main.dialog_note.cv_action
+import kotlinx.android.synthetic.main.dialog_note.cv_cancel
+import kotlinx.android.synthetic.main.dialog_note.edt_noteDes
+import kotlinx.android.synthetic.main.dialog_note.edt_noteTitle
+import kotlinx.android.synthetic.main.dialog_note.img_selectTime
+import kotlinx.android.synthetic.main.dialog_note.txt_category
+import kotlinx.android.synthetic.main.dialog_note.txt_noteDate
+import kotlinx.android.synthetic.main.dialog_note_detail.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,14 +40,6 @@ class HomeFragment : Fragment() {
 
     val sdf = SimpleDateFormat("dd/MM/yyyy")
     val currentDate = sdf.format(Date())
-
-    var txt_noDataFound: TextView? = null
-    var img_addNote: ImageView? = null
-    var img_showNotes: ImageView? = null
-
-
-    var rcv_home: RecyclerView? = null
-    var calendarView_note: CalendarView? = null
 
 
     lateinit var adapterNote: AdapterNote
@@ -47,22 +50,23 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        initUI(view)
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
 
         setUpAndDisplayNotes()
 
         init()
-
-
-        return view
     }
-
 
     private fun init() {
         val splitCurrDate = currentDate.toString().split("/")
-        val strCurrDate = formatMonthToStr(splitCurrDate[1], splitCurrDate[0], splitCurrDate[2])
+        val strCurrDate = UtilsManager.formatMonthToStr(splitCurrDate[1], splitCurrDate[0], splitCurrDate[2])
 
         img_addNote?.setOnClickListener {
             dialogAddNote()
@@ -92,14 +96,13 @@ class HomeFragment : Fragment() {
 
             setUpAndDisplayNotesBySelectedDay(sDate)
         })
-//        adapterNote.setOnItemClickListener(object : AdapterNote.onCustomItemClickListener{
-//            override fun onItemClick(position: Int) {
-//                val note = noteList[position]
-//
-//                dialogDetailNote(note)
-//            }
-//
-//        })
+
+        swipeRefreshLayout.setOnRefreshListener {
+            setUpAndDisplayNotes()
+
+            swipeRefreshLayout.isRefreshing = false
+
+        }
     }
 
     fun setUpAndDisplayNotes() {
@@ -146,35 +149,24 @@ class HomeFragment : Fragment() {
         dialog.setContentView(R.layout.dialog_note)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val txt_titleDialogNote: TextView = dialog.findViewById(R.id.txt_titleDialogNote)
-        val edt_noteTitle: EditText = dialog.findViewById(R.id.edt_noteTitle)
-        val edt_noteDes: EditText = dialog.findViewById(R.id.edt_noteDes)
-        val txt_noteDate: TextView = dialog.findViewById(R.id.txt_noteDate)
+        dialog.txt_noteDate.text = currentDate.toString()
 
-        val cv_action: CardView = dialog.findViewById(R.id.cv_action)
-
-        val cv_cancel: CardView = dialog.findViewById(R.id.cv_cancel)
-
-        val img_selectTime: ImageView = dialog.findViewById(R.id.img_selectTime)
-
-
-        txt_noteDate.text = currentDate.toString()
-
-        img_selectTime.setOnClickListener {
-            dialogSetUpTime(txt_noteDate, requireContext())
+        dialog.img_selectTime.setOnClickListener {
+            dialogSetUpTime(dialog.txt_noteDate, requireContext())
         }
 
-        cv_action.setOnClickListener{
-            val nTitle = edt_noteTitle.text.toString()
-            val nDes = edt_noteDes.text.toString()
-            val nDate = txt_noteDate.text.toString()
+        dialog.cv_action.setOnClickListener{
+            val nTitle = dialog.edt_noteTitle.text.toString()
+            val nDes = dialog.edt_noteDes.text.toString()
+            val nDate = dialog.txt_noteDate.text.toString()
+            val nCategory = dialog.txt_category.text.toString()
 
             if (nTitle.isEmpty() || nDes.isEmpty())
             {
                 Toast.makeText(context, "Error : Fulfill data", Toast.LENGTH_SHORT).show()
             }
             else {
-                val note = Note(null,nTitle, nDes, nDate, false)
+                val note = Note(null,nTitle, nDes, nDate, false,nCategory)
                 DbHandler.getInstance(requireContext())?.noteDao()?.insertNote(note)
 
                 setUpAndDisplayNotes()
@@ -182,7 +174,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        cv_cancel.setOnClickListener{
+        dialog.cv_cancel.setOnClickListener{
             dialog.dismiss()
         }
 
@@ -194,43 +186,34 @@ class HomeFragment : Fragment() {
         dialog.setContentView(R.layout.dialog_note_detail)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val edt_noteTitle: EditText = dialog.findViewById(R.id.edt_noteTitle)
-        val edt_noteDes: EditText = dialog.findViewById(R.id.edt_noteDes)
-        val txt_noteDate: TextView = dialog.findViewById(R.id.txt_noteDate)
-        val txt_titleFinishStatus: TextView = dialog.findViewById(R.id.txt_titleFinishStatus)
-
-        val cv_action: CardView = dialog.findViewById(R.id.cv_action)
-
-        val cv_delete: CardView = dialog.findViewById(R.id.cv_delete)
-
-        val img_selectTime: ImageView = dialog.findViewById(R.id.img_selectTime)
-
-
-        img_selectTime.setOnClickListener {
-            dialogSetUpTime(txt_noteDate, requireContext())
+        dialog.img_selectTime.setOnClickListener {
+            dialogSetUpTime(dialog.txt_noteDate, requireContext())
         }
 
-        txt_noteDate.text = note.nCreatedDate
-        edt_noteTitle.setText(note.nTitle)
-        edt_noteDes.setText(note.nDescription)
+        dialog.txt_category.text = note.nCategory
+        dialog.txt_noteDate.text = note.nCreatedDate
+        dialog.edt_noteTitle.setText(note.nTitle)
+        dialog.edt_noteDes.setText(note.nDescription)
+
         if (!note.nIsFinish)
         {
-            txt_titleFinishStatus.text = "( Not Finish )"
+            dialog.txt_titleFinishStatus.text = "( Not Finish )"
         } else {
-            txt_titleFinishStatus.text = "( Finished )"
+            dialog.txt_titleFinishStatus.text = "( Finished )"
         }
 
-        cv_action.setOnClickListener{
-            val nTitle = edt_noteTitle.text.toString()
-            val nDes = edt_noteDes.text.toString()
-            val nDate = txt_noteDate.text.toString()
+        dialog.cv_action.setOnClickListener{
+            val nTitle = dialog.edt_noteTitle.text.toString()
+            val nDes = dialog.edt_noteDes.text.toString()
+            val nDate = dialog.txt_noteDate.text.toString()
+            val nCategory = dialog.txt_category.text.toString()
 
             if (nTitle.isEmpty() || nDes.isEmpty())
             {
                 Toast.makeText(context, "Error : Fulfill data", Toast.LENGTH_SHORT).show()
             }
             else {
-                val note = Note(note.nId,nTitle, nDes, nDate, note.nIsFinish)
+                val note = Note(note.nId,nTitle, nDes, nDate, note.nIsFinish,nCategory)
                 DbHandler.getInstance(requireContext())?.noteDao()?.updateNote(note)
 
                 setUpAndDisplayNotes()
@@ -238,7 +221,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        cv_delete.setOnClickListener{
+        dialog.cv_delete.setOnClickListener{
             DbHandler.getInstance(requireContext())?.noteDao()?.deleteNote(note)
 
             setUpAndDisplayNotes()
@@ -277,47 +260,5 @@ class HomeFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    fun formatMonthToStr(month: String, day: String, year: String): String? {
-        var strFormatted = "Unk"
 
-        if (month == "01") {
-            strFormatted = "January"
-        } else if (month == "02") {
-            strFormatted = "February"
-        } else if (month == "03") {
-            strFormatted = "March"
-        } else if (month == "04") {
-            strFormatted = "April"
-        } else if (month == "05") {
-            strFormatted = "May"
-        } else if (month == "06") {
-            strFormatted = "June"
-        } else if (month == "07") {
-            strFormatted = "July"
-        } else if (month == "08") {
-            strFormatted = "August"
-        } else if (month == "09") {
-            strFormatted = "September"
-        } else if (month == "10") {
-            strFormatted = "October"
-        } else if (month == "11") {
-            strFormatted = "November"
-        } else if (month == "12") {
-            strFormatted = "December"
-        }
-
-        return "$strFormatted $day, $year"
-    }
-
-
-    private fun initUI(view: View) {
-        calendarView_note  = view.findViewById(R.id.calendarView_note)
-
-        txt_noDataFound = view.findViewById(R.id.txt_noDataFound)
-
-        img_addNote = view.findViewById(R.id.img_addNote)
-        img_showNotes = view.findViewById(R.id.img_showNotes)
-
-        rcv_home = view.findViewById(R.id.rcv_home)
-    }
 }

@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">Simple TODO</string>
+
+    <string name="applicationLanguage_english" translatable="false">English</string>
+    <string name="applicationLanguage_vietNam" translatable="false">Tiếng Việt</string>
+
+
     <string name="title_home">Home</string>
     <string name="title_calendar">Search</string>
     <string name="title_setting">Setting</string>
+
+    <string name="title_application">Application</string>
+    <string name="title_passlock">Password</string>
+    <string name="title_shareApp">Share app</string>
+    <string name="title_review">Reviews</string>
+    <string name="title_language">Application Language</string>
+
+    <string name="title_noData">No data found !</string>
 </resources>

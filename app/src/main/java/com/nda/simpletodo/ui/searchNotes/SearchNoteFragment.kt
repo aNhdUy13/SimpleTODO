@@ -21,30 +21,34 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nda.simpletodo.DbHandler
 import com.nda.simpletodo.R
 import com.nda.simpletodo.models.Note
+import kotlinx.android.synthetic.main.dialog_note.cv_action
+import kotlinx.android.synthetic.main.dialog_note.edt_noteDes
+import kotlinx.android.synthetic.main.dialog_note.edt_noteTitle
+import kotlinx.android.synthetic.main.dialog_note.img_selectTime
+import kotlinx.android.synthetic.main.dialog_note.txt_noteDate
+import kotlinx.android.synthetic.main.dialog_note_detail.*
+import kotlinx.android.synthetic.main.fragment_search.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 class SearchNoteFragment : Fragment() {
-    var searchView: androidx.appcompat.widget.SearchView? = null
-
     var adapterSearchNote:AdapterSearchNote?  = null
     var noteList = arrayListOf<Note>()
-    var rcv_notes: RecyclerView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_search, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
+    }
 
-        initUI(view)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setUpAndDisplayNotes()
 
-
         init()
-        return view
     }
 
     private fun init() {
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView_notes?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 rcv_notes?.scrollToPosition(0)
                 searchData(query)
@@ -60,6 +64,12 @@ class SearchNoteFragment : Fragment() {
                 return false
             }
         })
+
+        swipeRefreshLayout.setOnRefreshListener {
+            setUpAndDisplayNotes()
+
+            swipeRefreshLayout.isRefreshing = false
+        }
     }
     private fun searchData(typingData: String) {
         val tempListData = java.util.ArrayList<Note>()
@@ -88,43 +98,35 @@ class SearchNoteFragment : Fragment() {
         dialog.setContentView(R.layout.dialog_note_detail)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val edt_noteTitle: EditText = dialog.findViewById(R.id.edt_noteTitle)
-        val edt_noteDes: EditText = dialog.findViewById(R.id.edt_noteDes)
-        val txt_noteDate: TextView = dialog.findViewById(R.id.txt_noteDate)
-        val txt_titleFinishStatus: TextView = dialog.findViewById(R.id.txt_titleFinishStatus)
 
-        val cv_action: CardView = dialog.findViewById(R.id.cv_action)
-
-        val cv_delete: CardView = dialog.findViewById(R.id.cv_delete)
-
-        val img_selectTime: ImageView = dialog.findViewById(R.id.img_selectTime)
-
-
-        img_selectTime.setOnClickListener {
-            dialogSetUpTime(txt_noteDate, requireContext())
+        dialog.img_selectTime.setOnClickListener {
+            dialogSetUpTime(dialog.txt_noteDate, requireContext())
         }
 
-        txt_noteDate.text = note.nCreatedDate
-        edt_noteTitle.setText(note.nTitle)
-        edt_noteDes.setText(note.nDescription)
+        dialog.txt_category.text = note.nCategory
+        dialog.txt_noteDate.text = note.nCreatedDate
+        dialog.edt_noteTitle.setText(note.nTitle)
+        dialog.edt_noteDes.setText(note.nDescription)
+
         if (!note.nIsFinish)
         {
-            txt_titleFinishStatus.text = "( Not Finish )"
+            dialog.txt_titleFinishStatus.text = "( Not Finish )"
         } else {
-            txt_titleFinishStatus.text = "( Finished )"
+            dialog.txt_titleFinishStatus.text = "( Finished )"
         }
 
-        cv_action.setOnClickListener{
-            val nTitle = edt_noteTitle.text.toString()
-            val nDes = edt_noteDes.text.toString()
-            val nDate = txt_noteDate.text.toString()
+        dialog.cv_action.setOnClickListener{
+            val nTitle = dialog.edt_noteTitle.text.toString()
+            val nDes = dialog.edt_noteDes.text.toString()
+            val nDate = dialog.txt_noteDate.text.toString()
+            val nCategory = dialog.txt_category.text.toString()
 
             if (nTitle.isEmpty() || nDes.isEmpty())
             {
                 Toast.makeText(context, "Error : Fulfill data", Toast.LENGTH_SHORT).show()
             }
             else {
-                val note = Note(note.nId,nTitle, nDes, nDate, note.nIsFinish)
+                val note = Note(note.nId,nTitle, nDes, nDate, note.nIsFinish, nCategory)
                 DbHandler.getInstance(requireContext())?.noteDao()?.updateNote(note)
 
                 setUpAndDisplayNotes()
@@ -132,7 +134,7 @@ class SearchNoteFragment : Fragment() {
             }
         }
 
-        cv_delete.setOnClickListener{
+        dialog.cv_delete.setOnClickListener{
             DbHandler.getInstance(requireContext())?.noteDao()?.deleteNote(note)
 
             setUpAndDisplayNotes()
@@ -170,13 +172,5 @@ class SearchNoteFragment : Fragment() {
 
         datePickerDialog.show()
     }
-
-    private fun initUI(view: View?) {
-        searchView = view?.findViewById(R.id.searchView_notes)
-
-        rcv_notes = view?.findViewById(R.id.rcv_notes)
-
-    }
-
 
 }

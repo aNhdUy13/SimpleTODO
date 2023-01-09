@@ -11,4 +11,5 @@ data class Note(
         val nDescription: String,
         val nCreatedDate: String,
         val nIsFinish: Boolean,
+        val nCategory: String
     )

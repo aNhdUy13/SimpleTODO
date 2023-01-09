@@ -60,7 +60,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Others"
+                android:text="@string/title_application"
                 android:textColor="@color/purple_500"
                 android:textStyle="bold"/>
 
@@ -73,7 +73,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Password"
+                    android:text="@string/title_passlock"
                     android:textColor="@color/black_text"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
@@ -81,18 +81,44 @@
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_passlock"
-                    android:layout_width="wrap_content"
+                    android:layout_width="55dp"
                     android:layout_height="wrap_content"
                     />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_applicationLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_language"
+                    android:textColor="@color/black_text"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/txt_applicationLanguage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="50dp"
+                    android:text="@string/applicationLanguage_english"
+                    android:textColor="@color/silver_text"
+
+                    />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/txt_shareApp"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center|left"
-                android:text="Share the App"
+                android:text="@string/title_shareApp"
                 android:textColor="@color/black_text"/>
 
             <TextView
@@ -100,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center|left"
-                android:text="Reviews"
+                android:text="@string/title_review"
                 android:textColor="@color/black_text"/>
 
         </LinearLayout>

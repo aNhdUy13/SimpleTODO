@@ -1,6 +1,7 @@
 package com.nda.simpletodo.ui.searchNotes
 
 import android.annotation.SuppressLint
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -60,21 +61,22 @@ class AdapterSearchNote(private var noteList: List<com.nda.simpletodo.models.Not
             if (note.nIsFinish)
             {
                 cb_note.isChecked = true
+                txt_title.paintFlags = txt_title.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 txt_title.setTypeface(txt_title.typeface, Typeface.ITALIC);
             }
             else {
                 cb_note.isChecked = false
-                txt_title.setTypeface(txt_title.typeface, Typeface.NORMAL);
+                txt_title.setTypeface(txt_title.typeface, Typeface.BOLD);
             }
 
             var noteUpdate: Note
 
             cb_note.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    noteUpdate = Note(note.nId,note.nTitle, note.nDescription, note.nCreatedDate, true)
+                    noteUpdate = Note(note.nId,note.nTitle, note.nDescription, note.nCreatedDate, true, note.nCategory)
                 }
                 else {
-                    noteUpdate = Note(note.nId,note.nTitle, note.nDescription, note.nCreatedDate, false)
+                    noteUpdate = Note(note.nId,note.nTitle, note.nDescription, note.nCreatedDate, false, note.nCategory)
                 }
                 DbHandler.getInstance(context)?.noteDao()?.updateNote(noteUpdate)
 

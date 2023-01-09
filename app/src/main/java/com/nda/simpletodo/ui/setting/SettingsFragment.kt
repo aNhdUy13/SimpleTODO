@@ -11,29 +11,37 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.nda.simpletodo.R
 import com.nda.simpletodo.UtilsManager
+import kotlinx.android.synthetic.main.bottomsheet_applicaiton_language.*
+import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment() {
 
-    var switch_passlock: SwitchCompat? = null
-
+    var actionOnClick: View.OnClickListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_settings, container, false)
+        return inflater.inflate(R.layout.fragment_settings, container, false)
+    }
 
-        initUI(view)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         init()
-        return view
+
     }
 
     private fun init() {
         /**
-         * Pass lock
+         * Process raw data
          */
         switch_passlock!!.isChecked = UtilsManager.getEnablePassLock() == true
+
+        txt_applicationLanguage.text = UtilsManager.getApplicationLanguage().toString()
+
+
 
         switch_passlock!!.setOnCheckedChangeListener { compoundButton, isChecked ->
             if (isChecked) {
@@ -46,12 +54,34 @@ class SettingsFragment : Fragment() {
             }
         }
 
+
+        actionOnClick = View.OnClickListener {
+            if (it == ll_applicationLanguage)
+            {
+                bottomSheetSelectApplicationLanguage()
+            }
+        }
+        ll_applicationLanguage.setOnClickListener(actionOnClick)
     }
 
-    private fun initUI(view: View?) {
-        switch_passlock = view?.findViewById(R.id.switch_passlock)
+    private fun bottomSheetSelectApplicationLanguage() {
+        val view: View = layoutInflater.inflate(R.layout.bottomsheet_applicaiton_language, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        bottomSheetDialog.setContentView(view)
 
+        bottomSheetDialog.txt_english.setOnClickListener {
+            txt_applicationLanguage.text = bottomSheetDialog.txt_english.text.toString().trim()
+            UtilsManager.setApplicationLanguage(getString(R.string.applicationLanguage_english))
+            bottomSheetDialog.dismiss()
+        }
+        bottomSheetDialog.txt_vietNam.setOnClickListener {
+            txt_applicationLanguage.text = bottomSheetDialog.txt_vietNam.text.toString().trim()
+            UtilsManager.setApplicationLanguage(getString(R.string.applicationLanguage_vietNam))
+            bottomSheetDialog.dismiss()
+        }
+        bottomSheetDialog.show()
     }
+
 
     private fun dialogSetPassLock() {
         val dialog = Dialog(requireContext())

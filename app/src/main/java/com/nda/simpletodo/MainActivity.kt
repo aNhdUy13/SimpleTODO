@@ -1,10 +1,13 @@
 package com.nda.simpletodo
 
+import android.app.Activity
 import android.app.Dialog
-import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -15,6 +18,7 @@ import com.nda.simpletodo.ui.home.HomeFragment
 import com.nda.simpletodo.ui.searchNotes.SearchNoteFragment
 import com.nda.simpletodo.ui.setting.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
@@ -29,6 +33,21 @@ class MainActivity : AppCompatActivity() {
         {
             dialogPassLock();
         }
+
+        if (UtilsManager.getApplicationLanguage().toString().isEmpty())
+        {
+            UtilsManager.setApplicationLanguage(getString(R.string.applicationLanguage_english))
+            UtilsManager.setLocalLanguage(this,"en")
+        }
+        else if (UtilsManager.getApplicationLanguage().toString().trim() == getString(R.string.applicationLanguage_vietNam))
+        {
+            UtilsManager.setLocalLanguage(this,"vi-rVN")
+        }
+        else if (UtilsManager.getApplicationLanguage().toString().trim() == getString(R.string.applicationLanguage_english))
+        {
+            UtilsManager.setLocalLanguage(this,"en")
+        }
+
         replaceFragment(homeFragment)
 
         bottom_nav_view.setOnItemSelectedListener {
@@ -85,5 +104,6 @@ class MainActivity : AppCompatActivity() {
         })
         dialog.show()
     }
+
 
 }

@@ -4,17 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_default"
-    android:padding="5dp"
     android:layout_marginBottom="10dp">
-
     <LinearLayout
         android:id="@+id/ll_itemNote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_default_2"/>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+
             android:orientation="horizontal">
             <CheckBox
                 android:id="@+id/cb_note"
@@ -22,24 +27,56 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black_text"/>
 
-            <TextView
-                android:id="@+id/txt_title"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black_text"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:hint="Text"/>
+                android:layout_height="match_parent"
+                android:gravity="center|left"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txt_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_text"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textSize="15dp"
+                    android:text="Note Title"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center|left">
+                    <TextView
+                        android:id="@+id/txt_createdDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/silver_text"
+                        android:textSize="12dp"
+                        android:text="dd/MM/yyyy"/>
+                    <ImageView
+                        android:id="@+id/img_copyNote"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:elevation="5dp"
+                        android:layout_marginLeft="7dp"
+                        android:src="@drawable/ic_baseline_file_copy_512"/>
+
+                    <ImageView
+                        android:id="@+id/img_shareNote"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:elevation="5dp"
+                        android:layout_marginLeft="7dp"
+                        android:src="@drawable/ic_baseline_share_512"/>
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_createdDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black_text"
-            android:textSize="12dp"
-            android:layout_gravity="right"
-            android:text="dd/MM/yyyy"/>
+
+
 
     </LinearLayout>
 </RelativeLayout>

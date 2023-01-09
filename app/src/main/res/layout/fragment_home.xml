@@ -1,67 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefreshLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
-    <ImageView
-        android:id="@+id/img_addNote"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:elevation="5dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="60dp"
-        android:src="@drawable/ic_add"/>
 
-    <ImageView
-        android:id="@+id/img_showNotes"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:elevation="5dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/ic_show_all"/>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/img_addNote"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:elevation="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="60dp"
+            android:src="@drawable/ic_add"/>
+
+        <ImageView
+            android:id="@+id/img_showNotes"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:elevation="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_show_all"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:orientation="horizontal">
-            <CalendarView
-                android:id="@+id/calendarView_note"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="310dp"/>
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:orientation="horizontal">
+                <CalendarView
+                    android:id="@+id/calendarView_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="310dp"/>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                android:padding="10dp"
+                tools:listitem="@layout/item_note"
+                />
+
+            <TextView
+                android:id="@+id/txt_noDataFound"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textColor="@color/black_text"
+                android:text="@string/title_noData"/>
+
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcv_home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            />
-
-        <TextView
-            android:id="@+id/txt_noDataFound"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:visibility="gone"
-            android:textColor="@color/black_text"
-            android:text="No Data Found !"/>
-
-    </LinearLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
