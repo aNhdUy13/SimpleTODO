@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -14,10 +13,8 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.CalendarView.OnDateChangeListener
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.nda.simpletodo.DbHandler
 import com.nda.simpletodo.R
 import com.nda.simpletodo.UtilsManager

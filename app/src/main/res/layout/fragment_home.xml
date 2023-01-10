@@ -42,11 +42,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
                 android:orientation="horizontal">
+                <com.nda.simpletodo.ui.home.CustomCalendar.CustomCalendarView
+                    android:layout_width="match_parent"
+                    android:layout_height="370dp"
+                    />
+
+
                 <CalendarView
                     android:id="@+id/calendarView_note"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="310dp"/>
             </LinearLayout>

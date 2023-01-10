@@ -1,12 +1,10 @@
 package com.nda.simpletodo.ui.searchNotes
 
-import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.nda.simpletodo.DbHandler
 import com.nda.simpletodo.R
