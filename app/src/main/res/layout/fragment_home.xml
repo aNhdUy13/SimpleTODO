@@ -19,11 +19,12 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginRight="10dp"
             android:src="@drawable/ic_add"/>
 
         <ImageView
             android:id="@+id/img_showNotes"
+            android:visibility="gone"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:elevation="5dp"

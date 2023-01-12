@@ -11,4 +11,5 @@
     <string name="title_language">Ngôn ngữ ứng dụng</string>
     <string name="title_noData">Không Tìm Thấy Dữ Liệu !</string>
     <string name="title_todoList">Việc Cần Làm</string>
+    <string name="title_thingToDo">Việc cần làm ngày : </string>
 </resources>

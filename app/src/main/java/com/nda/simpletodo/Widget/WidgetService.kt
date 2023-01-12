@@ -34,7 +34,7 @@ class WidgetRemoteViewFactory(applicationContext: Context?, p0: Intent?) : Remot
             val des = cursor.getString(2)
             val date = cursor.getString(3)
             val isFinished:Boolean
-            val category = cursor.getString(5)
+            val category = cursor.getString(6)
             noteList.add(Note(id, title, des, date, false, category))
         }
     }

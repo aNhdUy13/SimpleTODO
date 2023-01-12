@@ -21,4 +21,6 @@
     <string name="app_widget_description" translatable="false">This is an app widget description</string>
 
     <string name="title_todoList">To Do List</string>
+
+    <string name="title_thingToDo">Things to do on : </string>
 </resources>

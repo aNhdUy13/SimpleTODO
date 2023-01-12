@@ -2,12 +2,14 @@ package com.nda.simpletodo
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.LocaleList
+import android.widget.TextView
 import com.google.android.material.internal.ContextUtils
 import java.util.*
 
@@ -110,6 +112,37 @@ class UtilsManager {
             val configuration: Configuration = resources.configuration
             configuration.setLocale(locale)
             resources.updateConfiguration(configuration, resources.displayMetrics)
+        }
+
+        /**
+         *
+         * */
+        fun dialogSetUpTime(txt_showDate: TextView, context: Context) {
+            val calendar = Calendar.getInstance()
+            val day = calendar[Calendar.DAY_OF_MONTH]
+            val month = calendar[Calendar.MONTH]
+            val year = calendar[Calendar.YEAR]
+
+            val datePickerDialog = DatePickerDialog(context, { view, Myear, Mmonth, MdayOfMonth ->
+
+                var selectedDay: String = MdayOfMonth.toString()
+                var selectedMonth: String = (Mmonth+1).toString()
+
+                if (MdayOfMonth < 10)
+                {
+                    selectedDay = "0$MdayOfMonth"
+                }
+                if ((Mmonth+1) < 10)
+                {
+                    selectedMonth = "0${Mmonth+1}"
+                }
+
+                val finalDate: String = "$selectedDay/$selectedMonth/$Myear"
+
+                txt_showDate.text = finalDate
+            }, year, month, day)
+
+            datePickerDialog.show()
         }
 
 

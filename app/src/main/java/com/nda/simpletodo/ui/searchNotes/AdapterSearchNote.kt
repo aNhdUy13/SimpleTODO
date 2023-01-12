@@ -71,7 +71,7 @@ class AdapterSearchNote(private var noteList: List<com.nda.simpletodo.models.Not
 
             cb_note.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    noteUpdate = Note(note.nId,note.nTitle, note.nDescription, note.nCreatedDate, true, note.nCategory)
+                    noteUpdate = Note(note.nId,note.nTitle, note.nDescription, note.nCreatedDate,true, note.nCategory)
                 }
                 else {
                     noteUpdate = Note(note.nId,note.nTitle, note.nDescription, note.nCreatedDate, false, note.nCategory)

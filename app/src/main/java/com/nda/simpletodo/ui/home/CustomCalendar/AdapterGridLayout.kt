@@ -3,13 +3,16 @@ package com.nda.simpletodo.ui.home.CustomCalendar
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.nda.simpletodo.DbHandler
 import com.nda.simpletodo.R
 import com.nda.simpletodo.models.Note
+import kotlinx.android.synthetic.main.item_day_cell.view.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,9 +59,11 @@ class AdapterGridLayout(context: Context, var dateList: List<Date>, var calendar
         if (displayMonth == calMonth && displayYear == calYear) {
             // Kiểm tra xem những ngày nào thuộc tháng ở trong GridView.
             // Nếu ngày đó thuộc tháng => text sẽ đc tô đậm
+
             txt_calendarDay!!.setTypeface(txt_calendarDay!!.typeface, Typeface.BOLD)
             txt_calendarDay!!.setTextColor(Color.parseColor("#000000"))
             view!!.setBackgroundColor(Color.parseColor("#FFFFFF"))
+
             if (dayNo == currDay && displayMonth == currMonth && displayYear == currYear) {
                 // Kiểm tra xem Ngày hiện tại thuộc chỗ nào => HIGHLIGHT
                 txt_calendarDay!!.setTypeface(txt_calendarDay!!.typeface, Typeface.BOLD)
@@ -73,18 +78,26 @@ class AdapterGridLayout(context: Context, var dateList: List<Date>, var calendar
         }
 
         // Set ngày cho từng khối trong Gridview
-        val txt_dayNumber = view.findViewById<TextView>(R.id.txt_calendarDay)
-        txt_dayNumber.text = dayNo.toString()
+        view.txt_calendarDay.text = dayNo.toString()
 
         // Hiển thị số lượng events của specific day
-        val txt_numberOfEvent = view.findViewById<TextView>(R.id.txt_numberOfEvent)
         val eventCalendar = Calendar.getInstance()
         val arrayList = ArrayList<String>()
-        for (i in noteList.indices) {
-            eventCalendar.time = convertStringToDate(noteList[i].nCreatedDate)
-            if (dayNo == eventCalendar[Calendar.DAY_OF_MONTH] && displayMonth == eventCalendar[Calendar.MONTH] + 1 && displayYear == eventCalendar[Calendar.YEAR]) {
-                arrayList.add(noteList[i].nTitle)
-                txt_numberOfEvent.text = arrayList.size.toString() + " notes"
+
+        for (i in noteList.indices)
+        {
+            val strSelectedDate = noteList[i].nCreatedDate
+
+            val strSplitDate = strSelectedDate.split("/")
+            val strDay = strSplitDate[0]
+            val strMonth = strSplitDate[1]
+            val strYear = strSplitDate[2]
+
+            if (dayNo == strDay.toInt()
+                && displayMonth == strMonth.toInt()
+                && displayYear == strYear.toInt())
+            {
+                view.txt_containEvent.visibility = View.VISIBLE
             }
         }
         return view

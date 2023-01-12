@@ -6,20 +6,22 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.*
 import android.widget.CalendarView.OnDateChangeListener
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nda.simpletodo.DbHandler
 import com.nda.simpletodo.R
 import com.nda.simpletodo.UtilsManager
 import com.nda.simpletodo.models.Note
-import kotlinx.android.synthetic.main.dialog_note.*
+import com.nda.simpletodo.ui.home.CustomCalendar.CustomCalendarView
 import kotlinx.android.synthetic.main.dialog_note.cv_action
 import kotlinx.android.synthetic.main.dialog_note.cv_cancel
 import kotlinx.android.synthetic.main.dialog_note.edt_noteDes
@@ -34,10 +36,12 @@ import java.util.*
 
 
 class HomeFragment : Fragment() {
+    var monthFormat = SimpleDateFormat("MMMM", Locale.ENGLISH)
+    var yearFormat = SimpleDateFormat("yyyy", Locale.ENGLISH)
+    var noteDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
 
     val sdf = SimpleDateFormat("dd/MM/yyyy")
     val currentDate = sdf.format(Date())
-
 
     lateinit var adapterNote: AdapterNote
     var noteList = ArrayList<Note>()
@@ -54,16 +58,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         setUpAndDisplayNotes()
 
         init()
     }
 
     private fun init() {
-        val splitCurrDate = currentDate.toString().split("/")
-        val strCurrDate = UtilsManager.formatMonthToStr(splitCurrDate[1], splitCurrDate[0], splitCurrDate[2])
 
         img_addNote?.setOnClickListener {
             dialogAddNote()
@@ -95,11 +95,12 @@ class HomeFragment : Fragment() {
         })
 
         swipeRefreshLayout.setOnRefreshListener {
+            refreshFragment()
+
             setUpAndDisplayNotes()
-
             swipeRefreshLayout.isRefreshing = false
-
         }
+
     }
 
     fun setUpAndDisplayNotes() {
@@ -141,6 +142,7 @@ class HomeFragment : Fragment() {
         adapterNote.setChangedDataTable(noteList)
 
     }
+
     private fun dialogAddNote() {
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.dialog_note)
@@ -149,7 +151,7 @@ class HomeFragment : Fragment() {
         dialog.txt_noteDate.text = currentDate.toString()
 
         dialog.img_selectTime.setOnClickListener {
-            dialogSetUpTime(dialog.txt_noteDate, requireContext())
+            UtilsManager.dialogSetUpTime(dialog.txt_noteDate, requireContext())
         }
 
         dialog.cv_action.setOnClickListener{
@@ -163,9 +165,10 @@ class HomeFragment : Fragment() {
                 Toast.makeText(context, "Error : Fulfill data", Toast.LENGTH_SHORT).show()
             }
             else {
-                val note = Note(null,nTitle, nDes, nDate, false,nCategory)
+                val note = Note(null,nTitle, nDes, nDate,false,nCategory)
                 DbHandler.getInstance(requireContext())?.noteDao()?.insertNote(note)
 
+                refreshFragment()
                 setUpAndDisplayNotes()
                 dialog.dismiss()
             }
@@ -184,7 +187,7 @@ class HomeFragment : Fragment() {
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialog.img_selectTime.setOnClickListener {
-            dialogSetUpTime(dialog.txt_noteDate, requireContext())
+            UtilsManager.dialogSetUpTime(dialog.txt_noteDate, requireContext())
         }
 
         dialog.txt_category.text = note.nCategory
@@ -213,6 +216,8 @@ class HomeFragment : Fragment() {
                 val note = Note(note.nId,nTitle, nDes, nDate, note.nIsFinish,nCategory)
                 DbHandler.getInstance(requireContext())?.noteDao()?.updateNote(note)
 
+                refreshFragment()
+
                 setUpAndDisplayNotes()
                 dialog.dismiss()
             }
@@ -220,6 +225,8 @@ class HomeFragment : Fragment() {
 
         dialog.cv_delete.setOnClickListener{
             DbHandler.getInstance(requireContext())?.noteDao()?.deleteNote(note)
+
+            refreshFragment()
 
             setUpAndDisplayNotes()
 
@@ -229,32 +236,15 @@ class HomeFragment : Fragment() {
         dialog.show()
     }
 
-    fun dialogSetUpTime(txt_showDate: TextView, context: Context) {
-        val calendar = Calendar.getInstance()
-        val day = calendar[Calendar.DAY_OF_MONTH]
-        val month = calendar[Calendar.MONTH]
-        val year = calendar[Calendar.YEAR]
+    fun refreshFragment()
+    {
+        val bundle = Bundle()
 
-        val datePickerDialog = DatePickerDialog(context, { view, Myear, Mmonth, MdayOfMonth ->
+        val fragment = HomeFragment()
+        fragment.arguments = bundle
 
-            var selectedDay: String = MdayOfMonth.toString()
-            var selectedMonth: String = (Mmonth+1).toString()
-
-            if (MdayOfMonth < 10)
-            {
-                selectedDay = "0$MdayOfMonth"
-            }
-            if ((Mmonth+1) < 10)
-            {
-                selectedMonth = "0${Mmonth+1}"
-            }
-
-            val finalDate: String = "$selectedDay/$selectedMonth/$Myear"
-
-            txt_showDate.text = finalDate
-        }, year, month, day)
-
-        datePickerDialog.show()
+        parentFragmentManager.beginTransaction().replace(R.id.fragment_host_activity_main, fragment)
+            .commit()
     }
 
 
