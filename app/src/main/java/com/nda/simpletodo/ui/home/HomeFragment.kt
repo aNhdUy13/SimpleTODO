@@ -1,5 +1,6 @@
 package com.nda.simpletodo.ui.home
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
@@ -40,6 +41,7 @@ class HomeFragment : Fragment() {
     var yearFormat = SimpleDateFormat("yyyy", Locale.ENGLISH)
     var noteDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
 
+    @SuppressLint("SimpleDateFormat")
     val sdf = SimpleDateFormat("dd/MM/yyyy")
     val currentDate = sdf.format(Date())
 
